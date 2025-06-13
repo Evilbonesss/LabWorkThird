@@ -30,7 +30,6 @@ public class MonsterView extends JFrame {
     }
 
     private void initializeUI() {
-        // Верхняя панель с кнопками
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         JButton importButton = new JButton("Импорт");
         JButton exportButton = new JButton("Экспорт");
@@ -38,7 +37,6 @@ public class MonsterView extends JFrame {
         topPanel.add(exportButton);
         add(topPanel, BorderLayout.NORTH);
 
-        // Левая панель: Список источников и список чудовищ по источнику
         JPanel leftPanel = new JPanel(new BorderLayout(8, 8));
         sourcesModel = new DefaultListModel<>();
         sourcesList = new JList<>(sourcesModel);
@@ -59,7 +57,6 @@ public class MonsterView extends JFrame {
         leftPanel.add(listsSplit, BorderLayout.CENTER);
         add(leftPanel, BorderLayout.WEST);
 
-        // Центральная панель: Информация и редактирование
         JTabbedPane tabbedPane = new JTabbedPane();
 
         infoArea = new JTextArea();
@@ -84,7 +81,6 @@ public class MonsterView extends JFrame {
 
         add(tabbedPane, BorderLayout.CENTER);
 
-        // Слушатели
         importButton.addActionListener(e -> controller.importFiles(this, monsters -> {
             updateSourcesList();
             JOptionPane.showMessageDialog(this,
@@ -117,7 +113,6 @@ public class MonsterView extends JFrame {
             }
         });
 
-        // Первичное заполнение
         updateSourcesList();
     }
 
