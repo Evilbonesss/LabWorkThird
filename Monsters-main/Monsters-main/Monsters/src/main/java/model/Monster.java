@@ -1,4 +1,3 @@
-
 package model;
 
 import java.text.ParseException;
@@ -6,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -139,7 +139,7 @@ public class Monster {
     }
     
     public void addIngredient(String name, int quantity) {
-        Map<String, Object> ingredient = new HashMap<>();
+        Map<String, Object> ingredient = new LinkedHashMap<>();
         ingredient.put("name", name);
         ingredient.put("quantity", quantity);
         this.recipe.add(ingredient);
