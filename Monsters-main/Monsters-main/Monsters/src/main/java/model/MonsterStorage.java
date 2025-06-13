@@ -3,88 +3,75 @@ package model;
 import java.io.File;
 import java.util.*;
 
-
 public class MonsterStorage {
-    private List<Monster> monsters = new ArrayList<>();
-    private Map<String, List<Monster>> monstersBySource = new HashMap<>();
-    private Map<File, List<Monster>> monstersByFile = new HashMap<>();
+    private final Map<String, Monster> monsterByKey = new LinkedHashMap<>();
+    private final Map<String, List<Monster>> monstersBySource = new HashMap<>();
+    private final Map<File, List<Monster>> monstersByFile = new HashMap<>();
 
-    public void addMonster(Monster monster, File sourceFile) {
-        if (monster != null && sourceFile != null) {
-            monsters.add(monster);
-            if (!monstersBySource.containsKey(monster.getSource())) {
-                monstersBySource.put(monster.getSource(), new ArrayList<>());
-            }
-            monstersBySource.get(monster.getSource()).add(monster);
-            if (!monstersByFile.containsKey(sourceFile)) {
-                monstersByFile.put(sourceFile, new ArrayList<>());
-            }
-            monstersByFile.get(sourceFile).add(monster);
-        }
+    private String buildKey(String name, String source) {
+        return (name == null ? "" : name.toLowerCase()) + "|" + (source == null ? "" : source);
+    }
+
+    public boolean addMonster(Monster monster, File sourceFile) {
+        if (monster == null || sourceFile == null) return false;
+        String key = buildKey(monster.getName(), monster.getSource());
+        if (monsterByKey.containsKey(key)) return false; // duplicate – skip
+
+        monsterByKey.put(key, monster);
+
+        monstersBySource.computeIfAbsent(monster.getSource(), k -> new ArrayList<>()).add(monster);
+        monstersByFile.computeIfAbsent(sourceFile, k -> new ArrayList<>()).add(monster);
+        return true;
     }
 
     public List<Monster> getMonsters() {
-        return Collections.unmodifiableList(monsters);
+        return Collections.unmodifiableList(new ArrayList<>(monsterByKey.values()));
     }
 
     public Optional<Monster> getMonsterById(UUID id) {
-        return monsters.stream()
-                .filter(m -> m.getId().equals(id))
-                .findFirst();
+        return monsterByKey.values().stream().filter(m -> m.getId().equals(id)).findFirst();
     }
-    
+
     public List<Monster> getMonstersBySource(String source) {
-        List<Monster> filteredMonsters = new ArrayList<>();
-        for (Monster monster : monsters) {
-            if (monster.getSource() != null && monster.getSource().equals(source)) {
-                filteredMonsters.add(monster);
-            }
-        }
-        return filteredMonsters;
+        return monstersBySource.getOrDefault(source, Collections.emptyList());
     }
-    
+
     public boolean updateMonster(UUID id, Monster newData) {
-        Optional<Monster> existing = getMonsterById(id);
+        Optional<Monster> optExisting = getMonsterById(id);
+        if (optExisting.isEmpty()) return false;
 
-        if (existing.isPresent()) {
-            Monster monster = existing.get();
-            String originalSource = monster.getSource();
+        Monster monster = optExisting.get();
+        String oldKey = buildKey(monster.getName(), monster.getSource());
+        String oldSource = monster.getSource();
 
-            monster.setName(newData.getName());
-            monster.setDescription(newData.getDescription());
-            monster.setDangerLevel(newData.getDangerLevel());
-            monster.setHabitats(newData.getHabitats());
-            monster.setFirstMentioned(newData.getFirstMentioned());
-            monster.setVulnerabilities(newData.getVulnerabilities());
-            monster.setImmunities(newData.getImmunities());
-            monster.setActivity(newData.getActivity());
+        monster.setName(newData.getName());
+        monster.setDescription(newData.getDescription());
+        monster.setDangerLevel(newData.getDangerLevel());
+        monster.setHabitats(newData.getHabitats());
+        monster.setFirstMentioned(newData.getFirstMentioned());
+        monster.setVulnerabilities(newData.getVulnerabilities());
+        monster.setImmunities(newData.getImmunities());
+        monster.setActivity(newData.getActivity());
 
-            monster.getParameters().clear();
-            for (Map.Entry<String, String> entry : newData.getParameters().entrySet()) {
-                monster.getParameters().put(entry.getKey(), entry.getValue());
-            }
+        monster.getParameters().clear();
+        monster.getParameters().putAll(newData.getParameters());
 
-            monster.getRecipe().clear();
-            for (Map<String, Object> ingredient : newData.getRecipe()) {
-                monster.getRecipe().add(ingredient);
-            }
-            String newSource = newData.getSource();
-            if (!originalSource.equals(newSource)) {
-                List<Monster> originalList = monstersBySource.get(originalSource);
-                if (originalList != null) {
-                    originalList.remove(monster);
-                }
+        monster.getRecipe().clear();
+        monster.getRecipe().addAll(newData.getRecipe());
 
-                if (!monstersBySource.containsKey(newSource)) {
-                    monstersBySource.put(newSource, new ArrayList<>());
-                }
-                monstersBySource.get(newSource).add(monster);
-                monster.setSource(newSource);
-            }
+        monster.setSource(newData.getSource());
+        String newSource = monster.getSource();
 
-            return true;
+        if (!Objects.equals(oldSource, newSource)) {
+            monstersBySource.getOrDefault(oldSource, Collections.emptyList()).remove(monster);
+            monstersBySource.computeIfAbsent(newSource, k -> new ArrayList<>()).add(monster);
         }
 
-        return false;
+        String newKey = buildKey(monster.getName(), monster.getSource());
+        if (!oldKey.equals(newKey)) {
+            monsterByKey.remove(oldKey);
+            monsterByKey.put(newKey, monster);
+        }
+        return true;
     }
 }

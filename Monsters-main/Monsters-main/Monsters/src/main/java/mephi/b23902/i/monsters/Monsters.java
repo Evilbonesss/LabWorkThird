@@ -1,3 +1,4 @@
+
 package mephi.b23902.i.monsters;
 
 import controller.MonsterController;

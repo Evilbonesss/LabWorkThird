@@ -1,3 +1,4 @@
+
 package model.exporters;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -48,14 +49,9 @@ public class XMLExporter {
             for (Map<String, Object> ing : monster.getRecipe()) {
                 Element ingElement = doc.createElement("ingredient");
                 recipeElement.appendChild(ingElement);
-
-                Object nameObj = ing.get("name");
-                String name = nameObj != null ? nameObj.toString() : "";
-                appendTextElement(doc, ingElement, "name", name);
-
-                Object quantityObj = ing.get("quantity");
-                String quantity = quantityObj != null ? quantityObj.toString() : "";
-                appendTextElement(doc, ingElement, "quantity", quantity);            }
+                appendTextElement(doc, ingElement, "name", ing.get("name").toString());
+                appendTextElement(doc, ingElement, "quantity", ing.get("quantity").toString());
+            }
             appendTextElement(doc, recipeElement, "prep_time", monster.getParameter("prep_time"));
             appendTextElement(doc, recipeElement, "effectiveness", monster.getParameter("effectiveness"));
         }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +20,7 @@ public class JSONExporter {
     }
 
     public void export(List<Monster> monsters, File outputFile) throws IOException {
-        Map<String, Object> root = new LinkedHashMap<>();
+        Map<String, Object> root = new HashMap<>();
         root.put("creatures", convertMonstersToMapList(monsters));
         
         mapper.writeValue(outputFile, root);
@@ -30,7 +30,7 @@ public class JSONExporter {
         List<Map<String, Object>> exportData = new ArrayList<>();
         
         for (Monster monster : monsters) {
-            Map<String, Object> monsterData = new LinkedHashMap<>();
+            Map<String, Object> monsterData = new HashMap<>();
             monsterData.put("name", monster.getName());
             monsterData.put("description", monster.getDescription());
             monsterData.put("danger_level", monster.getDangerLevel());
@@ -42,7 +42,7 @@ public class JSONExporter {
             monsterData.put("activity", monster.getActivity());
 
             if (monster.getRecipe() != null) {
-                Map<String, Object> recipeData = new LinkedHashMap<>();
+                Map<String, Object> recipeData = new HashMap<>();
                 recipeData.put("ingredients", monster.getRecipe());
                 recipeData.put("prep_time", monster.getParameter("prep_time"));
                 recipeData.put("effectiveness", monster.getParameter("effectiveness"));

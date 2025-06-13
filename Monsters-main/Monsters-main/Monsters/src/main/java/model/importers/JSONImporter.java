@@ -82,8 +82,8 @@ public class JSONImporter implements FileImporter {
 
         if (data.containsKey("recipe")) {
             Map<String, Object> recipeData = (Map<String, Object>) data.get("recipe");
-            if (recipeData.containsKey("ingredients")) {
-                List<Map<String, Object>> ingredients = (List<Map<String, Object>>) recipeData.get("ingredients");
+            if (recipeData.containsKey("ingredient")) {
+                List<Map<String, Object>> ingredients = (List<Map<String, Object>>) recipeData.get("ingredient");
                 for (Map<String, Object> ingredient : ingredients) {
                     String name = (String) ingredient.get("name");
                     int quantity = (int) ingredient.get("quantity");

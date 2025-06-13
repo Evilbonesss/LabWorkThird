@@ -57,12 +57,7 @@ public class YAMLImporter implements FileImporter {
         }
 
         if (data.containsKey("first_mentioned")) {
-            Object firstMentionedObj = data.get("first_mentioned");
-            if (firstMentionedObj instanceof java.util.Date) {
-                monster.setFirstMentioned((java.util.Date) firstMentionedObj);
-            } else if (firstMentionedObj != null) {
-                monster.setFirstMentioned(firstMentionedObj.toString());
-            }
+            monster.setFirstMentioned((String) data.get("first_mentioned"));
         }
 
         if (data.containsKey("vulnerabilities")) {
@@ -88,8 +83,9 @@ public class YAMLImporter implements FileImporter {
 
         if (data.containsKey("recipe")) {
             Map<String, Object> recipeData = (Map<String, Object>) data.get("recipe");
-            if (recipeData.containsKey("ingredients")) {
-                List<Map<String, Object>> ingredients = (List<Map<String, Object>>) recipeData.get("ingredients");                for (Map<String, Object> ingredient : ingredients) {
+            if (recipeData.containsKey("ingredient")) {
+                List<Map<String, Object>> ingredients = (List<Map<String, Object>>) recipeData.get("ingredient");
+                for (Map<String, Object> ingredient : ingredients) {
                     String name = (String) ingredient.get("name");
                     int quantity = (int) ingredient.get("quantity");
                     monster.addIngredient(name, quantity);
