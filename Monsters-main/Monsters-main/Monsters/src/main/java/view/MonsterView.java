@@ -21,7 +21,7 @@ public class MonsterView extends JFrame {
 
     public MonsterView(MonsterController controller) {
         this.controller = controller;
-        setTitle("Bestiarum: Новый Внешний Вид");
+        setTitle("Bestiarum");
         setSize(1050, 680);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

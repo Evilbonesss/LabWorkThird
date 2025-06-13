@@ -15,7 +15,7 @@ public class MonsterStorage {
     public boolean addMonster(Monster monster, File sourceFile) {
         if (monster == null || sourceFile == null) return false;
         String key = buildKey(monster.getName(), monster.getSource());
-        if (monsterByKey.containsKey(key)) return false; // duplicate – skip
+        if (monsterByKey.containsKey(key)) return false;
 
         monsterByKey.put(key, monster);
 
