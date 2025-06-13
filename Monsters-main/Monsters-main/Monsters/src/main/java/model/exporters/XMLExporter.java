@@ -49,9 +49,14 @@ public class XMLExporter {
             for (Map<String, Object> ing : monster.getRecipe()) {
                 Element ingElement = doc.createElement("ingredient");
                 recipeElement.appendChild(ingElement);
-                appendTextElement(doc, ingElement, "name", ing.get("name").toString());
-                appendTextElement(doc, ingElement, "quantity", ing.get("quantity").toString());
-            }
+
+                Object nameObj = ing.get("name");
+                String name = nameObj != null ? nameObj.toString() : "";
+                appendTextElement(doc, ingElement, "name", name);
+
+                Object quantityObj = ing.get("quantity");
+                String quantity = quantityObj != null ? quantityObj.toString() : "";
+                appendTextElement(doc, ingElement, "quantity", quantity);            }
             appendTextElement(doc, recipeElement, "prep_time", monster.getParameter("prep_time"));
             appendTextElement(doc, recipeElement, "effectiveness", monster.getParameter("effectiveness"));
         }

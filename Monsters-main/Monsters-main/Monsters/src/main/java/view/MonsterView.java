@@ -73,7 +73,8 @@ public class MonsterView extends JFrame {
         descriptionPanel.add(saveButton, BorderLayout.SOUTH);
 
         rightPanel.add(descriptionPanel, BorderLayout.SOUTH);
-
+        splitPane.setRightComponent(rightPanel);
+        
         JPanel buttonPanel = new JPanel();
         JButton importButton = new JButton("Импорт");
 
@@ -89,7 +90,6 @@ public class MonsterView extends JFrame {
         getContentPane().setLayout(new BorderLayout(10,10));
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-        getContentPane().add(rightPanel, BorderLayout.EAST);
 
         updateTree();
     }

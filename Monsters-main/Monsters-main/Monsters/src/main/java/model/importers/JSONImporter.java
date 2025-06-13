@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.importers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -13,10 +9,6 @@ import java.util.List;
 import java.util.Map;
 import model.Monster;
 
-/**
- *
- * @author tsyga
- */
 public class JSONImporter implements FileImporter {
     private FileImporter next;
 
